@@ -1,4 +1,8 @@
-=<<<<<<< HEAD
+% Pierce Zhang, CMOR220, Fall 2023, Competency functions and drivers
+% functions_and_drivers.m
+% Answers to functions and drivers competency
+% 24 August 2023
+
 function functions_and_drivers
     % Problem 1
     disp(harm(1,2));
@@ -26,28 +30,15 @@ function functions_and_drivers
 
     % Problem 5
     lineqs(-2, 8, 3, 6);
-=======
-% Pierce Zhang, CMOR220, Fall 2023, Competency functions and drivers
-% functions_and_drivers.m
-% Answers to functions and drivers competency
-% 24 August 2023
-
-% Driver
-function functions_and_drivers
-    % Answer to problem 1
-    disp("p. 1 where a = 1, t = 2: " + Question1(1,2));
-    disp("p. 1 where a = 2, t = 4: " + Question1(2,4));
-    disp("p. 1 where a = 3, t = 6: " + Question1(3,6));    
->>>>>>> 22a9a6c7835e8d87bf4f3521ae8fa218240bf461
 end
 
 % Inputs:
 % Outputs:
-function [y] = Question1(a, t)
+function [y] = harm(a, t)
     y = a * sin(3 * t) + 4;
 end
 
-function [sinout, cosout, tanout] = Question2(x)
+function [sinout, cosout, tanout] = trigs(x)
     sinout = sin(x);
     cosout = cos(x);
     tanout = tan(x);
