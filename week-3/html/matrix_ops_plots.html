@@ -1,0 +1,457 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>matrix_ops_plots</title><meta name="generator" content="MATLAB 9.14"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-09-06"><meta name="DC.source" content="matrix_ops_plots.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% Pierce Zhang, CMOR220, Fall 2023, Matrix operations and plots</span>
+<span class="comment">% matrix_ops_plots.m</span>
+<span class="comment">% Answers to matrix operations and plots competency</span>
+<span class="comment">% 4 September 2023</span>
+
+<span class="comment">% Driver to answer the problems</span>
+<span class="keyword">function</span> matrix_ops_plots
+    problem_1
+    problem_2
+    problem_3
+    problem_4
+    problem_5
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs: none</span>
+<span class="comment">% Outputs: none</span>
+<span class="keyword">function</span> problem_1()
+    <span class="comment">% Given predefined matrices A and B as defined below, this function</span>
+    <span class="comment">% will display the result of adding, subtracting, element-wise</span>
+    <span class="comment">% multipling and multiplying A * B'.</span>
+    A = [2 3 2 ;  3 4 3];
+    B = [1 4 1 ;  5 8 5];
+    add_A_B = A + B
+    sub_B_A = A - B
+    elemult_A_B = A .* B
+    mult_A_Bprim = A * B'
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs: none</span>
+<span class="comment">% Outputs: none</span>
+<span class="keyword">function</span> problem_2()
+    <span class="comment">% Given predefined matrices A and B as defined below, this function</span>
+    <span class="comment">% will display the result of of solving the equations A * x1 = B and x2</span>
+    <span class="comment">% * A = B^T, where B^T is the transposition of B.</span>
+    A = [5 4 3 ; 6 5 4 ; 7 8 7];
+    B = [5 ; 6 ; 8];
+    x1 = A \ B
+    x2 = B' / A
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs: none</span>
+<span class="comment">% Outputs: none</span>
+<span class="keyword">function</span> problem_3()
+    <span class="comment">% This function will plot sqrt(x), 2*sqrt(x), and 3*sqrt(x) in</span>
+    <span class="comment">% different styles and colors.</span>
+    figure
+    hold <span class="string">on</span>
+
+    x = linspace(0, 5, 100);
+
+    y1 = sqrt(x);
+    plot(x, y1, <span class="string">'Color'</span>, <span class="string">'b'</span>, <span class="string">'LineWidth'</span>, 2);
+
+    y2 = 2 * sqrt(x);
+    plot(x, y2, <span class="string">'LineStyle'</span>, <span class="string">':'</span>, <span class="string">'Color'</span>, <span class="string">'r'</span>);
+
+    y3 = 3 * sqrt(x);
+    plot(x, y3, <span class="string">'Color'</span>, <span class="string">'g'</span>, <span class="string">'Marker'</span>, <span class="string">'o'</span>, <span class="string">'MarkerIndices'</span>,1:5:length(x));
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs: none</span>
+<span class="comment">% Outputs: none</span>
+<span class="keyword">function</span> problem_4()
+    <span class="comment">% This function will draw a pirate face using function graphs on</span>
+    <span class="comment">% different domains, overlayed in a single window using hold on.</span>
+    figure
+    hold <span class="string">on</span>
+    x1 = linspace( (-5 * pi) / 3 , (5 * pi) / 3 , 100);
+    y1 = 1.75*cos(0.7*x1) + 9;
+
+    x2 = linspace(-4, 4, 100);
+    y2 = -0.02*x2.^2 + 6.45;
+
+    x3 = linspace(-5.3, -4, 100);
+    y3 = -1.1*x3 + 1.7;
+
+    x4 = linspace(4, 5.3, 100);
+    y4 = 1.1*x4 + 1.7;
+
+    x5 = linspace(1.55, 2.5, 100);
+    y5 = 2*(x5 - 2).^2 + 5;
+
+    x6 = linspace(-2.5, -1.55, 100);
+    y6 = 2*(x6 + 2).^2 + 5;
+
+    x7 = linspace(1.55, 2.5, 100);
+    y7 = 0.1*x7 + 5.25;
+
+    x8 = linspace(-2.5, -1.55, 100);
+    y8 = -0.1*x8 + 5.25;
+
+    x9 = linspace(-3, 1.55, 100);
+    y9 = 0.045*(x9 - 1.5).^2 + 5.4;
+
+    x10 = linspace(2.5, 3.15, 100);
+    y10 = 0.2*x10.^2 + 4.25;
+
+    x11 = linspace(0, 2, 100);
+    y11 = 0.4*(x11 - 0.6).^2 + 1.2;
+
+    x12 = linspace(-2, 0, 100);
+    y12 = 0.4*(x12 + 0.6).^2 + 1.2;
+
+    x13 = linspace(-2, 2, 100);
+    y13 = -abs(0.8*sin(1.2*x13)) + 2.5;
+
+    plot(x1,y1)
+    plot(x2,y2)
+    plot(x3,y3)
+    plot(x4,y4)
+    plot(x5,y5)
+    plot(x6,y6)
+    plot(x7,y7)
+    plot(x8,y8)
+    plot(x9,y9)
+    plot(x10,y10)
+    plot(x11,y11)
+    plot(x12,y12)
+    plot(x13,y13)
+
+    x14 = linspace(-3, 3, 100);
+    y14 = [];
+    <span class="keyword">for</span> x_i = x14
+        y14 = [y14, BrD(x_i)];
+    <span class="keyword">end</span>
+
+    plot(x14, y14)
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs: x, in domain R</span>
+<span class="comment">% Outputs: y, in domain R</span>
+<span class="keyword">function</span> [y] = BrD(x)
+    <span class="comment">%BrD is a function that plots a key part of your part, but can only take</span>
+    <span class="comment">%one input at a time and only return one output at a time. As such, a</span>
+    <span class="comment">%vector input is invalid. Use a loop to plot this over your domain!</span>
+    a = eigs(eye(3)*x);
+    z = a(randi(3));
+    y = (z^2/3+2)+(rand()-0.5)*x*0.35+zeros(1,1)+rand()*1.4-(z~=1.064)-3.5;
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs: none</span>
+<span class="comment">% Outputs: none</span>
+<span class="keyword">function</span> problem_5()
+    <span class="comment">% This function will display four subfigures of various compositions of</span>
+    <span class="comment">% elementary functions.</span>
+    x = linspace(0, 10, 100);
+
+    figure
+    sgtitle(<span class="string">"A subfigure array for Problem 5"</span>)
+
+    y1 = log(x) .* sin(6 * x);
+    subplot(2, 2, 1)
+    hold <span class="string">on</span>
+    title(<span class="string">"Plot of y = ln(x)sin(6x)"</span>)
+    plot(x, y1)
+
+    y2 = (x / 4) .^ 2 .* cos(2*x);
+    subplot(2, 2, 2)
+    hold <span class="string">on</span>
+    title(<span class="string">"Plot of y = ( x / 4 )^2 * cos(2x)"</span>)
+    plot(x, y2)
+
+    y3 = 3 * sin(x .^2 / 2);
+    subplot(2, 2, 3)
+    hold <span class="string">on</span>
+    title(<span class="string">"Plot of y = 3*sin( x^2 / 2 )"</span>)
+    plot(x, y3)
+
+    y4 = sin(x) .* cos(x .^ 2);
+    subplot(2, 2, 4)
+    hold <span class="string">on</span>
+    title(<span class="string">"Plot of y = sin(x) * cos(x^2)"</span>)
+    plot(x, y4)
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+add_A_B =
+
+     3     7     3
+     8    12     8
+
+
+sub_B_A =
+
+     1    -1     1
+    -2    -4    -2
+
+
+elemult_A_B =
+
+     2    12     2
+    15    32    15
+
+
+mult_A_Bprim =
+
+    16    44
+    22    62
+
+
+x1 =
+
+    0.5000
+    1.0000
+   -0.5000
+
+
+x2 =
+
+  -17.5000   16.0000   -0.5000
+
+</pre><img vspace="5" hspace="5" src="matrix_ops_plots_01.png" alt=""> <img vspace="5" hspace="5" src="matrix_ops_plots_02.png" alt=""> <img vspace="5" hspace="5" src="matrix_ops_plots_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Pierce Zhang, CMOR220, Fall 2023, Matrix operations and plots
+% matrix_ops_plots.m
+% Answers to matrix operations and plots competency
+% 4 September 2023
+
+% Driver to answer the problems
+function matrix_ops_plots
+    problem_1
+    problem_2
+    problem_3
+    problem_4
+    problem_5
+end
+
+% Inputs: none
+% Outputs: none
+function problem_1()
+    % Given predefined matrices A and B as defined below, this function
+    % will display the result of adding, subtracting, element-wise
+    % multipling and multiplying A * B'.
+    A = [2 3 2 ;  3 4 3];
+    B = [1 4 1 ;  5 8 5];
+    add_A_B = A + B
+    sub_B_A = A - B
+    elemult_A_B = A .* B
+    mult_A_Bprim = A * B'
+end
+
+% Inputs: none
+% Outputs: none
+function problem_2()
+    % Given predefined matrices A and B as defined below, this function
+    % will display the result of of solving the equations A * x1 = B and x2
+    % * A = B^T, where B^T is the transposition of B.
+    A = [5 4 3 ; 6 5 4 ; 7 8 7];
+    B = [5 ; 6 ; 8];
+    x1 = A \ B
+    x2 = B' / A
+end
+
+% Inputs: none
+% Outputs: none
+function problem_3()
+    % This function will plot sqrt(x), 2*sqrt(x), and 3*sqrt(x) in
+    % different styles and colors.
+    figure
+    hold on
+
+    x = linspace(0, 5, 100);
+
+    y1 = sqrt(x);
+    plot(x, y1, 'Color', 'b', 'LineWidth', 2);
+
+    y2 = 2 * sqrt(x);
+    plot(x, y2, 'LineStyle', ':', 'Color', 'r');
+
+    y3 = 3 * sqrt(x);
+    plot(x, y3, 'Color', 'g', 'Marker', 'o', 'MarkerIndices',1:5:length(x));
+end
+
+% Inputs: none
+% Outputs: none
+function problem_4()
+    % This function will draw a pirate face using function graphs on
+    % different domains, overlayed in a single window using hold on.
+    figure
+    hold on
+    x1 = linspace( (-5 * pi) / 3 , (5 * pi) / 3 , 100);
+    y1 = 1.75*cos(0.7*x1) + 9;
+    
+    x2 = linspace(-4, 4, 100);
+    y2 = -0.02*x2.^2 + 6.45;
+    
+    x3 = linspace(-5.3, -4, 100);
+    y3 = -1.1*x3 + 1.7;
+    
+    x4 = linspace(4, 5.3, 100);
+    y4 = 1.1*x4 + 1.7;
+    
+    x5 = linspace(1.55, 2.5, 100);
+    y5 = 2*(x5 - 2).^2 + 5;
+    
+    x6 = linspace(-2.5, -1.55, 100);
+    y6 = 2*(x6 + 2).^2 + 5;
+    
+    x7 = linspace(1.55, 2.5, 100);
+    y7 = 0.1*x7 + 5.25;
+    
+    x8 = linspace(-2.5, -1.55, 100);
+    y8 = -0.1*x8 + 5.25;
+    
+    x9 = linspace(-3, 1.55, 100);
+    y9 = 0.045*(x9 - 1.5).^2 + 5.4;
+    
+    x10 = linspace(2.5, 3.15, 100);
+    y10 = 0.2*x10.^2 + 4.25;
+    
+    x11 = linspace(0, 2, 100);
+    y11 = 0.4*(x11 - 0.6).^2 + 1.2;
+    
+    x12 = linspace(-2, 0, 100);
+    y12 = 0.4*(x12 + 0.6).^2 + 1.2;
+    
+    x13 = linspace(-2, 2, 100);
+    y13 = -abs(0.8*sin(1.2*x13)) + 2.5;
+
+    plot(x1,y1)
+    plot(x2,y2)
+    plot(x3,y3)
+    plot(x4,y4)
+    plot(x5,y5)
+    plot(x6,y6)
+    plot(x7,y7)
+    plot(x8,y8)
+    plot(x9,y9)
+    plot(x10,y10)
+    plot(x11,y11)
+    plot(x12,y12)
+    plot(x13,y13)
+
+    x14 = linspace(-3, 3, 100);
+    y14 = [];
+    for x_i = x14
+        y14 = [y14, BrD(x_i)];
+    end
+
+    plot(x14, y14)
+end
+
+% Inputs: x, in domain R
+% Outputs: y, in domain R
+function [y] = BrD(x)
+    %BrD is a function that plots a key part of your part, but can only take
+    %one input at a time and only return one output at a time. As such, a
+    %vector input is invalid. Use a loop to plot this over your domain!
+    a = eigs(eye(3)*x);
+    z = a(randi(3));
+    y = (z^2/3+2)+(rand()-0.5)*x*0.35+zeros(1,1)+rand()*1.4-(z~=1.064)-3.5;
+end
+
+% Inputs: none
+% Outputs: none
+function problem_5()
+    % This function will display four subfigures of various compositions of
+    % elementary functions.
+    x = linspace(0, 10, 100);
+
+    figure
+    sgtitle("A subfigure array for Problem 5")
+
+    y1 = log(x) .* sin(6 * x);
+    subplot(2, 2, 1)
+    hold on
+    title("Plot of y = ln(x)sin(6x)")
+    plot(x, y1)
+
+    y2 = (x / 4) .^ 2 .* cos(2*x);
+    subplot(2, 2, 2)
+    hold on
+    title("Plot of y = ( x / 4 )^2 * cos(2x)")
+    plot(x, y2)
+
+    y3 = 3 * sin(x .^2 / 2);
+    subplot(2, 2, 3)
+    hold on
+    title("Plot of y = 3*sin( x^2 / 2 )")
+    plot(x, y3)
+
+    y4 = sin(x) .* cos(x .^ 2);
+    subplot(2, 2, 4)
+    hold on
+    title("Plot of y = sin(x) * cos(x^2)")
+    plot(x, y4)
+end
+##### SOURCE END #####
+--></body></html>

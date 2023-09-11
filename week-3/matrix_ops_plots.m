@@ -1,8 +1,9 @@
 % Pierce Zhang, CMOR220, Fall 2023, Matrix operations and plots
 % matrix_ops_plots.m
 % Answers to matrix operations and plots competency
-% 4 September 2023
+% 6 September 2023
 
+% Driver to answer the problems
 function matrix_ops_plots
     problem_1
     problem_2
@@ -11,7 +12,12 @@ function matrix_ops_plots
     problem_5
 end
 
+% Inputs: none
+% Outputs: none
 function problem_1()
+    % Given predefined matrices A and B as defined below, this function
+    % will display the result of adding, subtracting, element-wise
+    % multipling and multiplying A * B'.
     A = [2 3 2 ;  3 4 3];
     B = [1 4 1 ;  5 8 5];
     add_A_B = A + B
@@ -20,14 +26,23 @@ function problem_1()
     mult_A_Bprim = A * B'
 end
 
+% Inputs: none
+% Outputs: none
 function problem_2()
+    % Given predefined matrices A and B as defined below, this function
+    % will display the result of of solving the equations A * x1 = B and x2
+    % * A = B^T, where B^T is the transposition of B.
     A = [5 4 3 ; 6 5 4 ; 7 8 7];
     B = [5 ; 6 ; 8];
     x1 = A \ B
     x2 = B' / A
 end
 
+% Inputs: none
+% Outputs: none
 function problem_3()
+    % This function will plot sqrt(x), 2*sqrt(x), and 3*sqrt(x) in
+    % different styles and colors.
     figure
     hold on
 
@@ -39,13 +54,15 @@ function problem_3()
     y2 = 2 * sqrt(x);
     plot(x, y2, 'LineStyle', ':', 'Color', 'r');
 
-    disp(1:3:length(x));
-
     y3 = 3 * sqrt(x);
     plot(x, y3, 'Color', 'g', 'Marker', 'o', 'MarkerIndices',1:5:length(x));
 end
 
+% Inputs: none
+% Outputs: none
 function problem_4()
+    % This function will draw a pirate face using function graphs on
+    % different domains, overlayed in a single window using hold on.
     figure
     hold on
     x1 = linspace( (-5 * pi) / 3 , (5 * pi) / 3 , 100);
@@ -110,6 +127,8 @@ function problem_4()
     plot(x14, y14)
 end
 
+% Inputs: x, in domain R
+% Outputs: y, in domain R
 function [y] = BrD(x)
     %BrD is a function that plots a key part of your part, but can only take
     %one input at a time and only return one output at a time. As such, a
@@ -119,7 +138,11 @@ function [y] = BrD(x)
     y = (z^2/3+2)+(rand()-0.5)*x*0.35+zeros(1,1)+rand()*1.4-(z~=1.064)-3.5;
 end
 
+% Inputs: none
+% Outputs: none
 function problem_5()
+    % This function will display four subfigures of various compositions of
+    % elementary functions.
     x = linspace(0, 10, 100);
 
     figure
