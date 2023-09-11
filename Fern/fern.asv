@@ -1,0 +1,12 @@
+function fern
+    
+end
+
+function simplefern(cutoff)
+    z = [1 ; 0];
+    for int i=1:4000
+        r = rand()
+        if 
+        
+    end
+end
