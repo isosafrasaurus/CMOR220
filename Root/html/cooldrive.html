@@ -1,0 +1,295 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>cooldrive</title><meta name="generator" content="MATLAB 9.14"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-09-18"><meta name="DC.source" content="cooldrive.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">SECTION ONE: BISECTION FOR BAR COOLING %%</a></li><li><a href="#3">SECTION TWO: NEWTON VS BISECTION</a></li></ul></div><pre class="codeinput"><span class="comment">% Pierce Zhang, CMOR220, Fall 2023, Project 2: Root finding methods</span>
+<span class="comment">% cooldrive.m</span>
+<span class="comment">% Implements the Newton's method and the bisection method to find the</span>
+<span class="comment">% square of the least positive root of a cooling function to 1) simulate</span>
+<span class="comment">% heat dissipation from a metal rod and 2) compare the efficiencies (# of</span>
+<span class="comment">% iterations) between the two algorithms on different epsilon (tolerance)</span>
+<span class="comment">% levels.</span>
+<span class="comment">% Last modified: 18 September 2023</span>
+
+<span class="comment">% Driver function</span>
+<span class="keyword">function</span> cooldrive()
+</pre><h2 id="2">SECTION ONE: BISECTION FOR BAR COOLING %%</h2><p>Set bounds of bisection search [a,b], epsilon (t), and range of L from the cooling equation to solve for x.</p><pre class="codeinput">a = 0.1; b = 3; t = 0.01;
+L = 1 : 0.1 : 4;
+
+<span class="comment">% The right bound must tighten towards the left bound as L increases</span>
+<span class="comment">% because the bisection method only returns the greatest root within</span>
+<span class="comment">% a given range, but we want the smallest root.</span>
+x = zeros(0,length(L)); <span class="comment">% Preallocate blank vector</span>
+<span class="keyword">for</span> cnt = 1:length(L)
+    [x(cnt), iter] = debis(a,b,t,L(cnt));
+    b = b - 0.05; <span class="comment">% Reduce b to tighten range; b will reach a at end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Plot x^2 (the square of the roots from bisection) vs. L</span>
+figure()
+plot(L, x.^2, <span class="string">"-x"</span>)
+title(<span class="string">"Cooling Rate vs. Bar Length"</span>)
+xlabel(<span class="string">"Length, L"</span>)
+ylabel(<span class="string">"Decay Rate, x^2"</span>)
+
+clear
+</pre><img vspace="5" hspace="5" src="cooldrive_01.png" alt=""> <h2 id="3">SECTION TWO: NEWTON VS BISECTION</h2><p>Set bounds of search [a,b], L, and x0, initial value for using the Newton's method. Sets t to an array of tolerances from 10^-1 to 10^-8, dividing by 10 each time.</p><pre class="codeinput">L = 1; a = 0.1; b = 3; x0 = (a+b)/2;
+t = 10.^-(1:8);
+
+<span class="comment">% Preallocates two vectors, x_bis for bisection results and x_newt for</span>
+<span class="comment">% Newton's method results</span>
+x_bis = zeros(0,length(t));
+x_newt = zeros(0,length(t));
+<span class="keyword">for</span> cnt = 1:length(t)
+    [~,x_bis(cnt)] = debis(a,b,t(cnt),L); <span class="comment">% Store only # of iterations</span>
+    [~,x_newt(cnt)] = denewt(x0,t(cnt),L);
+<span class="keyword">end</span>
+
+<span class="comment">% Plot number of iterations of each of Newton's method and bisection</span>
+<span class="comment">% method against t, the given episilon (tolerance)</span>
+figure()
+semilogx(t, x_newt, <span class="string">"-o"</span>,<span class="string">"Color"</span>,<span class="string">'r'</span>);
+hold <span class="string">on</span>
+semilogx(t, x_bis, <span class="string">"-x"</span>,<span class="string">"Color"</span>,<span class="string">'b'</span>);
+hold <span class="string">on</span>
+
+title(<span class="string">"Bisection vs. Newton"</span>)
+xlabel(<span class="string">"Tolerance"</span>)
+ylabel(<span class="string">"# of iterations"</span>)
+legend(<span class="string">"Newton"</span>,<span class="string">"Bisection"</span>)
+</pre><img vspace="5" hspace="5" src="cooldrive_02.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+
+<span class="comment">% Inputs: x (x0), the value at which to begin searching for the root, t, the</span>
+<span class="comment">% tolerance, and L, the length of the bar which is just a scalar inside the</span>
+<span class="comment">% cooling equation.</span>
+<span class="comment">% Outputs: x, the root estimation, iter, number of iterations</span>
+<span class="keyword">function</span>[x,iter] = denewt(x,t,L)
+<span class="comment">%Newtons method, calls coolfun to find value and coolfundx to find</span>
+<span class="comment">%derivative</span>
+iter = 0;
+<span class="keyword">while</span> (abs(coolfun(x,L)) &gt; t)
+    x = x - coolfun(x,L)/coolfundx(x,L);
+    iter = iter + 1;
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs: a, the left bound of the range to search for the root, b, the</span>
+<span class="comment">% right bound of the same range, forming [a,b], tol, the epsilon</span>
+<span class="comment">% (tolerance), and L, the length of the bar for the equation</span>
+<span class="comment">% Outputs: x, the root estimation, iter, number of iterations</span>
+<span class="comment">% program ran</span>
+<span class="keyword">function</span> [x,iter] = debis(a,b,tol,L)
+<span class="comment">% Perform the bisection method</span>
+iter = 0;
+<span class="keyword">while</span> abs(b - a) &gt; tol
+    x = (a + b) / 2;
+    <span class="keyword">if</span> coolfun(a,L) * coolfun(x,L) &lt; 0
+        b = x; <span class="comment">% Same side -&gt; look on right side of pivot</span>
+    <span class="keyword">else</span>
+        a = x; <span class="comment">% Left side of pivot</span>
+    <span class="keyword">end</span>
+    iter = iter + 1;
+<span class="keyword">end</span>
+
+x = (a + b) / 2;
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs, x, arbitrary scalar number, and L, length of the bar used in</span>
+<span class="comment">% cooling equation</span>
+<span class="comment">% Outputs: val, value of the function returned when x and L are inputted.</span>
+<span class="keyword">function</span> val = coolfun(x,L) <span class="comment">%for a given x and L evaluate "cool"</span>
+val = sin(x*L) + x*cos(x*L);
+<span class="keyword">end</span>
+
+<span class="comment">% Inputs: arbitrary scalar number, and L, length of the bar used in</span>
+<span class="comment">% cooling equation</span>
+<span class="comment">% Outputs: val, value of the derivative of the function returned when x</span>
+<span class="comment">% and L are inputted.</span>
+<span class="keyword">function</span> val = coolfundx(x,L)
+<span class="comment">% evaluate the derivative, with respect to x, of coolfun</span>
+val = L*cos(x*L) + cos(x*L) - x*L*sin(x*L);
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Pierce Zhang, CMOR220, Fall 2023, Project 2: Root finding methods
+% cooldrive.m
+% Implements the Newton's method and the bisection method to find the
+% square of the least positive root of a cooling function to 1) simulate
+% heat dissipation from a metal rod and 2) compare the efficiencies (# of
+% iterations) between the two algorithms on different epsilon (tolerance)
+% levels.
+% Last modified: 18 September 2023
+
+% Driver function
+function cooldrive()
+%% SECTION ONE: BISECTION FOR BAR COOLING %%
+% Set bounds of bisection search [a,b], epsilon (t), and range of L
+% from the cooling equation to solve for x.
+a = 0.1; b = 3; t = 0.01;
+L = 1 : 0.1 : 4;
+
+% The right bound must tighten towards the left bound as L increases
+% because the bisection method only returns the greatest root within
+% a given range, but we want the smallest root.
+x = zeros(0,length(L)); % Preallocate blank vector
+for cnt = 1:length(L)
+    [x(cnt), iter] = debis(a,b,t,L(cnt));
+    b = b - 0.05; % Reduce b to tighten range; b will reach a at end
+end
+
+% Plot x^2 (the square of the roots from bisection) vs. L
+figure()
+plot(L, x.^2, "-x")
+title("Cooling Rate vs. Bar Length")
+xlabel("Length, L")
+ylabel("Decay Rate, x^2")
+
+clear
+
+%% SECTION TWO: NEWTON VS BISECTION
+% Set bounds of search [a,b], L, and x0, initial value for using the
+% Newton's method. Sets t to an array of tolerances from 10^-1 to
+% 10^-8, dividing by 10 each time.
+L = 1; a = 0.1; b = 3; x0 = (a+b)/2;
+t = 10.^-(1:8);
+
+% Preallocates two vectors, x_bis for bisection results and x_newt for
+% Newton's method results
+x_bis = zeros(0,length(t));
+x_newt = zeros(0,length(t));
+for cnt = 1:length(t)
+    [~,x_bis(cnt)] = debis(a,b,t(cnt),L); % Store only # of iterations
+    [~,x_newt(cnt)] = denewt(x0,t(cnt),L);
+end
+
+% Plot number of iterations of each of Newton's method and bisection
+% method against t, the given episilon (tolerance)
+figure()
+semilogx(t, x_newt, "-o","Color",'r');
+hold on
+semilogx(t, x_bis, "-x","Color",'b');
+hold on
+
+title("Bisection vs. Newton")
+xlabel("Tolerance")
+ylabel("# of iterations")
+legend("Newton","Bisection")
+end
+
+% Inputs: x (x0), the value at which to begin searching for the root, t, the
+% tolerance, and L, the length of the bar which is just a scalar inside the
+% cooling equation.
+% Outputs: x, the root estimation, iter, number of iterations
+function[x,iter] = denewt(x,t,L)
+%Newtons method, calls coolfun to find value and coolfundx to find
+%derivative
+iter = 0;
+while (abs(coolfun(x,L)) > t)
+    x = x - coolfun(x,L)/coolfundx(x,L);
+    iter = iter + 1;
+end
+end
+
+% Inputs: a, the left bound of the range to search for the root, b, the
+% right bound of the same range, forming [a,b], tol, the epsilon
+% (tolerance), and L, the length of the bar for the equation
+% Outputs: x, the root estimation, iter, number of iterations
+% program ran
+function [x,iter] = debis(a,b,tol,L)
+% Perform the bisection method
+iter = 0;
+while abs(b - a) > tol
+    x = (a + b) / 2;
+    if coolfun(a,L) * coolfun(x,L) < 0
+        b = x; % Same side -> look on right side of pivot
+    else
+        a = x; % Left side of pivot
+    end
+    iter = iter + 1;
+end
+
+x = (a + b) / 2;
+end
+
+% Inputs, x, arbitrary scalar number, and L, length of the bar used in
+% cooling equation
+% Outputs: val, value of the function returned when x and L are inputted.
+function val = coolfun(x,L) %for a given x and L evaluate "cool"
+val = sin(x*L) + x*cos(x*L);
+end
+
+% Inputs: arbitrary scalar number, and L, length of the bar used in
+% cooling equation
+% Outputs: val, value of the derivative of the function returned when x
+% and L are inputted.
+function val = coolfundx(x,L)
+% evaluate the derivative, with respect to x, of coolfun
+val = L*cos(x*L) + cos(x*L) - x*L*sin(x*L);
+end
+##### SOURCE END #####
+--></body></html>
