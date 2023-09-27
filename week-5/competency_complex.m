@@ -13,7 +13,7 @@ function competency_complex
 end
 
 %% PROBLEM 1
-% Inputs: none
+% Inputs: none  
 % Outputs: none
 function problem1
     % Initializes several complex numbers
