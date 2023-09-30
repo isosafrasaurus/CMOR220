@@ -1,17 +1,20 @@
-% Pierce Zhang, CMOR220, Fall 2023, Project 3B: Newton Fractals Bonus
+% Pierce Zhang, CMOR220, Fall 2023, Project 3: Newton Fractals
 % newton_bonus.m
-% Bonus for Newton fractals project
+% Find attractive periodic orbits in Newton's method
 % Last modified: 27 September 2023
 
+%% It holds that x^5 - 2x^4 + x^3 - x^2 + x - 1 exhibits an attractive periodic orbit on Newton's Method.
+
 % Driver function
-% Uses qnewt to produce four plots for each of four quartic functions
+% Uses qnewt to plot a polynomial that exhibits an attractive periodic orbit
+% behavior
 function newton_bonus
 % Parameters of Newton's method
-xt = [-0.2,0.0025,0.2];
-yt = [-0.2,0.0025,0.2];
+xt = [-0.2,0.00025,0.2];
+yt = [-0.2,0.00025,0.2];
 maxiter = 20;
 
-qnewt([2 -4 2-1i -1i 100],xt,yt,maxiter);
+qnewt([1 -2 1 -1 1 -1],xt,yt,maxiter);
 end
 
 % Inputs: q, a vector of coefficients of a polynomial
@@ -79,36 +82,6 @@ if (name ~= "" && extract(name,1) == '+')
 end
 end
 
-% Inputs: 
-% Outputs: color, verdict based on
-function [color] = newt(q, dq, roots, z, maxiter)
-rootcolors = ['r','g','b','y'];
-speccolors = ['k','m',"#D95319"];
-
-color = "";
-for i=1:maxiter
-    qval = polyval(q,z);
-    dqval = polyval(dq, z);
-
-    if (dqval == 0)
-        color = speccolors(1);
-        break
-    end
-    if (z > 1e9)
-        color = speccolors(2);
-        break
-    end
-    z = z - qval/dqval;
-
-    for ri=1:length(roots)
-        if (abs(z - roots(ri))<0.001)
-            color = rootcolors(ri);
-            break
-        end
-    end
-end
-end
-
 % Inputs:
 % q, a vector of up to 5 complex coefficients of a polynomial
 % xt, a vector of 3 x grid values, xlo, xinc, and xhi
@@ -116,20 +89,65 @@ end
 % maxiter, the maximum number of iterations
 % Outputs: none (produces plots)
 function qnewt(q, xt, yt, maxiter)
-% Plots the Newton's basins and wasteland for a given function
-% 1. Generate initial guesses using meshgrid,xt,yt
-% 2. Apply Newton's method
-% 3. Assign the colors by using find command
-% 4. Apply qlab to assign the titles for the plots
 
-for x = xt(1):xt(2):xt(3)
-    for y = yt(1):yt(2):yt(3)
-        color = newt(q, myownpolyder(q), roots(q), x+1i*y,maxiter);
-        if (color ~= "")
-            plot(x,y,'.','Color',color,'MarkerSize',5)
-        end
-        hold on
+% Parameters of iteration
+dq = myownpolyder(q);
+x = xt(1):xt(2):xt(3);
+y = yt(1):yt(2):yt(3);
+
+% Initialize grid to store results of Newton's method iteration
+[X,Y] = meshgrid(x,y);
+% Initialize four complex planes, where Z is current and Z_3 is 3 iters ago
+Z = X + 1i*Y; Z_1 = X + 1i*Y; Z_2 = X + 1i*Y; Z_3 = X + 1i*Y;
+% Run Newton iterations
+for k=1:maxiter
+    % Newton's method on all grid values simultaneously
+    dq_Z = polyval(dq,Z);
+    dq_Z(dq_Z==0) = NaN; % detect division by zero and set to NaN
+    Z = Z - polyval(q,Z)./dq_Z;
+    % Populate last three iters
+    if (k == maxiter - 3)
+        Z_3 = Z;
+    elseif (k == maxiter - 2)
+        Z_2 = Z;
+    elseif (k == maxiter - 1)
+        Z_1 = Z;
     end
 end
-title(qlab(q));
+
+% Plot
+figure()
+hold on
+
+r = roots(q); % find roots for comparison
+colors = ['r','y','g','b',"#A2142F"]; % root colors
+speccolors = ['k',"#EDB120",'m','c']; % special condition colors
+
+[hdiv0,kdiv0] = find(isnan(Z)); % show break down points as black
+plot(kdiv0,hdiv0,'.','color',speccolors(1),'MarkerSize',1,'DisplayName', ...
+    'Breakdown (dy/dx=0)');
+
+[hinf,kinf] = find(abs(Z)>1e18); % show infinite points as orange
+plot(kinf,hinf,'.','color',speccolors(2),'MarkerSize',1,'DisplayName', ...
+    'Divergence');
+Z(abs(Z)>1e18) = NaN;
+
+for i = 1:length(r)
+    [h,k] = find(abs(Z - r(i))<0.001); % get points near root r(i)
+    plot(k,h,'.','color',colors(i),'MarkerSize',1,'DisplayName',"Root #"+i); % plot
+    Z(abs(Z - r(i))<0.001) = NaN; % remove all root points from histories
+    Z_1(abs(Z_1 - r(i))<0.001) = NaN;
+    Z_2(abs(Z_2 - r(i))<0.001) = NaN;
+    Z_3(abs(Z_3 - r(i))<0.001) = NaN;
+end
+
+[hev,kev] = find(Z == Z_2); % plot Z, Z-2 iter orbit points
+[hod,kod] = find(Z_1 == Z_3); % plot Z-1, Z-3 iter orbit points
+plot(kev,hev,'.','color',speccolors(3),'MarkerSize',1,'DisplayName', ...
+    'B for ..ABAB orbit') % magenta
+plot(kod,hod,'.','color',speccolors(4),'MarkerSize',1, 'DisplayName', ...
+    'A for ..ABAB orbit') % cyan
+
+title("Orbits: " + qlab(q));
+legend;
 end

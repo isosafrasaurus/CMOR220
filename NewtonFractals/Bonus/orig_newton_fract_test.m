@@ -11,7 +11,7 @@ xt = [-0.2,0.00025,0.2];
 yt = [-0.2,0.00025,0.2];
 maxiter = 20;
 
-qnewt([2 -4 2-1i -1i 100],xt,yt,maxiter);
+qnewt([1 0 -2 2],xt,yt,maxiter);
 end
 
 % Inputs: q, a vector of coefficients of a polynomial
@@ -86,11 +86,6 @@ end
 % maxiter, the maximum number of iterations
 % Outputs: none (produces plots)
 function qnewt(q, xt, yt, maxiter)
-% Plots the Newton's basins and wasteland for a given function
-% 1. Generate initial guesses using meshgrid,xt,yt
-% 2. Apply Newton's method
-% 3. Assign the colors by using find command
-% 4. Apply qlab to assign the titles for the plots
 
 % Parameters of iteration
 dq = myownpolyder(q);
@@ -99,22 +94,56 @@ y = yt(1):yt(2):yt(3);
 
 % Initialize grid to store results of Newton's method iteration
 [X,Y] = meshgrid(x,y);
-Z = X + 1i*Y;
+% Initialize four complex planes, where Z is current and Z_3 is 3 iters ago
+Z = X + 1i*Y; Z_1 = X + 1i*Y; Z_2 = X + 1i*Y; Z_3 = X + 1i*Y;
+% Run Newton iterations
 for k=1:maxiter
     % Newton's method on all grid values simultaneously
-    Z = Z - polyval(q,Z)./polyval(dq,Z);
+    dq_Z = polyval(dq,Z);
+    dq_Z(dq_Z==0) = NaN; % detect division by zero and set to NaN
+    Z = Z - polyval(q,Z)./dq_Z;
+    % Populate last three iters
+    if (k == maxiter - 3)
+        Z_3 = Z;
+    elseif (k == maxiter - 2)
+        Z_2 = Z;
+    elseif (k == maxiter - 1)
+        Z_1 = Z;
+    end
 end
 
 % Plot
 figure()
+hold on
+
 r = roots(q); % find roots for comparison
-colors = ['r','y','g','b','m'];
+colors = ['r','y','g','b']; % root colors
+speccolors = ['k',"#EDB120",'m','c']; % special condition colors
+
+[hdiv0,kdiv0] = find(isnan(Z)); % show break down points as black
+plot(kdiv0,hdiv0,'.','color',speccolors(1),'MarkerSize',5,'DisplayName', ...
+    'Breakdown (dy/dx=0)');
+
+[hinf,kinf] = find(abs(Z)>1e18); % show infinite points as orange
+plot(kinf,hinf,'.','color',speccolors(2),'MarkerSize',5,'DisplayName', ...
+    'Divergence');
+
 for i = 1:length(r)
-    [h,k] = find(abs(Z - r(i))<0.001);
-    [hm,km] = find(abs(Z)>1e9);
-    plot(k,h,'.','color',colors(i),'MarkerSize',1);
-    plot(km,hm,'.','color',colors(5),'MarkerSize',1);
-    hold on
+    [h,k] = find(abs(Z - r(i))<0.001); % get points near root r(i)
+    plot(k,h,'.','color',colors(i),'MarkerSize',5,'DisplayName',"Root #"+i); % plot
+    Z(abs(Z - r(i))<0.001) = NaN; % remove all root points from histories
+    Z_1(abs(Z_1 - r(i))<0.001) = NaN;
+    Z_2(abs(Z_2 - r(i))<0.001) = NaN;
+    Z_3(abs(Z_3 - r(i))<0.001) = NaN;
 end
-title(qlab(q));
+
+[hev,kev] = find(Z == Z_2); % plot Z, Z-2 iter orbit points
+[hod,kod] = find(Z_1 == Z_3); % plot Z-1, Z-3 iter orbit points
+plot(kev,hev,'.','color',speccolors(3),'MarkerSize',5,'DisplayName', ...
+    'B for ..ABAB orbit') % magenta
+plot(kod,hod,'.','color',speccolors(4),'MarkerSize',5, 'DisplayName', ...
+    'A for ..BABA orbit') % cyan
+
+title("Orbits: " + qlab(q));
+legend;
 end
