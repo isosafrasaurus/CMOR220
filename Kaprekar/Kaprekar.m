@@ -41,13 +41,19 @@ function [data] = quest(n, maxiter)
 
     for i=1:maxiter
         for j=1:length(V)
-            if (data(j,i) == 0)
-                data(j,i+1) = 0;
-            elseif (isnan(dp(data(j,i))))
-                data(j,i+1) = kaprekar_iter(n, data(j,i));
-                dp(data(j,i)) = data(j,i+1);
+            redundant = false;
+            if (~redundant)
+                if (data(j,i) == 0)
+                    data(j,i+1) = 0;
+                elseif (isnan(dp(data(j,i))))
+                    data(j,i+1) = kaprekar_iter(n, data(j,i));
+                    dp(data(j,i)) = data(j,i+1);
+                else
+                    data(j,i+1) = dp(data(j,i));
+                    redundant = true;
+                end
             else
-                data(j,i+1) = dp(data(j,i));
+                data(j,i+1) = NaN;
             end
         end
     end
