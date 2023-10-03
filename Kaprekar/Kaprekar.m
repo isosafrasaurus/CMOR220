@@ -6,10 +6,31 @@
 % Driver
 function Kaprekar
     figure();
-    plot(0:12,quest(5,12),'-o');
-    title("Kaprekar Quest for 4-digit Values");
-    ylabel("Values"); xlabel("Iteration Count");
-    grid on;
+    hold on;
+    data = quest(5,12);
+    unique_values = unique(data(:,2));
+    matrix_cell = cell(1, length(unique_values));
+    for i = 1:length(unique_values)
+        rows = data(:,2) == unique_values(i);
+        matrix_cell{i} = data(rows,:);
+    end
+
+    for i=1:length(matrix_cell)
+        B = [];
+        A = matrix_cell{1,i};
+        for j=1:length(A)
+            B = [B ; 0 A(j,1)];
+            B = [B ; 1 A(j,2)];
+        end
+        line(B(:,1),B(:,2),"Marker","o",'Color',[rand,rand,rand])
+    end
+    plot(1:12,data(:,2:end),'-o');
+    
+    
+    % plot(0:10,quest(4,10),'-');
+    % title("Kaprekar Quest for 4-digit Values");
+    % ylabel("Values"); xlabel("Iteration Count");
+    % grid on;
 end
 
 function [d] = dis(x)
@@ -57,5 +78,4 @@ function [data] = quest(n, maxiter)
             end
         end
     end
-    disp('x');
 end
