@@ -1,13 +1,20 @@
+% Pierce Zhang, CMOR220, Fall 2023, Project 5: Population Model
+% population_models.m
+% Solve ODEs and model population of rabbits and foxes in two ways
+% Last modified: 11 October 2023
+
+% Driver function
 function population_models
     figure(); hold on; grid on;
     % r = 1, R(0) = 20, x in [0, 15], delta = 0.01
     [t_Ra, Ra] = eulers_method(@R_prime, 0, 20, 15, 0.01);
     plot(t_Ra, Ra);
+    xlabel("Time, t"); ylabel("Rabbit Population, R(t)"); title("Rabbit Population vs. Time, R(t)=20");
     % R(0) = 150
+    figure(); hold on; grid on;
     [t_Rb, Rb] = eulers_method(@R_prime, 0, 150, 15, 0.01);
     plot(t_Rb, Rb);
-    xlabel("Time, t"); ylabel("Rabbit Population, R(t)"); title("Rabbit Population vs. Time");
-    legend("R_a","R_b");
+    xlabel("Time, t"); ylabel("Rabbit Population, R(t)"); title("Rabbit Population vs. Time, R(t)=150");
 
     % (Rb) QUESTION ANSWERED: The rabbit population will tend towards K = 100
     % over time.
@@ -54,32 +61,40 @@ function population_models
     open(LimitCircleVid);
     for n = 1:length(ts)
          hold on; grid on;
-         xlabel("Rabbit Population, R(t)"); ylabel("Fox Population, F(t)");
-         title("Rabbit and Fox Limit Circle - Dynamic");
+         xlabel("Rabbits"); ylabel("Foxes");
+         title("time: " + num2str(n/length(ts) * 15));
          plot(RFs(:,1), RFs(:,2));
-         plot(RFs(n,1), RFs(n,2),"o","MarkerEdgeColor","k");
+         plot(RFs(n,1), RFs(n,2),"o","MarkerEdgeColor","r");
          writeVideo(LimitCircleVid, getframe(gcf));
          clf;
      end
      close(LimitCircleVid);
 end
 
+% Inputs: x, y, values at which to evaluate the first R' function
+% Outputs: value of R'(x, y)
 function [value] = R_prime(x, y)
     r = 1; K = 100;
     value = r * y * (1 - y/K);
 end
 
 % R is x, F is y
+% Inputs: x, y, values at which to evaluate the systemic R' function
+% Outputs: value of systemic R'(x, y)
 function [value] = R_sys_prime(x, y)
     k1 = 3; k2 = 3e-3;
     value = k1 * x - k2 * x * y;
 end
 
+% Inputs: x, y, values at which to evaluate the systemic F' function
+% Outputs: value of systemic F'(x, y)
 function [value] = F_sys_prime(x, y)
     k3 = 6e-4; k4 = 0.5;
     value = k3 * x * y - k4 * y;
 end
 
+% Inputs: x, y, values at which to evaluate the ODE version of RF' function
+% Outputs: vector containins values of systemic RF'(x, y)
 function dydt = odefun(t,y)
     dydt = zeros(2,1);
     dydt(1) = R_sys_prime(y(1), y(2));
