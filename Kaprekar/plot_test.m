@@ -5,9 +5,8 @@
 
 % Driver
 function plot_test
-    data = quest(5,12);
-    unique(data(:,12))
-    unique(data(:,10))
+    data = quest(5,24);
+    unique(data(:,24))
 end
 
 function [d] = dis(x)
