@@ -75,32 +75,6 @@ for n1=1:100 % n1 refers to test data index
     end
 end
 PercentCorrect=(Cnt/100)*100
-
-clear;
-
-% PART TWO
-
-load("DataClassification.mat")
-Cnt=0;
-for n=1:5 % over test data
-    TDist=zeros(40,200);
-    TrClst=ceil(n/5);
-    for m=1:15 % over train data
-        for k=1:200
-            TstCv=[TestData(:,k:200,n),TestData(:,1:(k-1),n)];
-            TDist(m,k)=DistanceCalc(TstCv,TrainingData(:,:,m));
-        end
-    end
-    Val=min(min(TDist));
-    [Idx,~]=find(TDist==Val);
-    ObsClst=ceil(Idx/10);
-    if TrClst==ObsClst
-        Cnt=Cnt+1;
-    end
-end
-CrctPcnt=(Cnt/20)*100;
-display(CrctPcnt)
-
 end
 
 function [nC]=GenNoise(C)
