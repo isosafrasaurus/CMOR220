@@ -81,6 +81,14 @@ clear;
 % PART TWO
 
 load("DataClassification.mat")
+figure();
+for n=1:20 %for each cluster
+    subplot(4,5,n);
+    for p=1:100
+        plot(trainingdata(:,:,15*(n-1)+1));
+    end
+end
+
 Cnt=0;
 for n=1:5 % over test data
     TDist=zeros(40,200);
